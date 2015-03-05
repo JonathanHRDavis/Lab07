@@ -120,7 +120,7 @@ T* QueueLinked<T>::dequeue()
     //also, check that there are items before dequeueing
 
 
-   if (sze == 0) return;
+   if (sze == 0) return NULL;
 
    NextNode<T>* prev = NULL;
    NextNode<T>* curr = back->getNext();  //the head

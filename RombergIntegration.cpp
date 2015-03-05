@@ -46,17 +46,30 @@ q1->enqueue(level0);
    //the total number of executions of the loop is ??
 
    //DO THIS
-   int iterations =     3           //can be precomputed
+   int iterations =     3   ;        //can be precomputed
    while (iterations > 0)
    {
       //DO THIS
       //use the algorithm described in the lab to improve the accuracy of your level 0 results
 
-	  lA = q1->dequeue();
-	  mA = q1->peek();
 	  
-Double levelK = new Double( ( ( (pow(4,k)) * mA ) - lA ) / ( (pow(4,k) - 1 ) );
-q2->engueue(levelK);
+	  for (int i = 0; i<iterations; i++)
+	   {
+		double lA = q1->dequeue()->getValue();
+		double mA = q1->peek()->getValue();
+	  
+		Double* levelK = new Double( ( ( (pow(4,power)) * mA ) - lA ) / ( (pow(4,power) - 1 ) ) );
+		q2->enqueue(levelK);
+
+		}
+		q1->dequeue();
+		
+		for (int i = 0; i < (iterations-1); i++)
+	    {
+			q1->enqueue(q2->dequeue());
+		}
+		
+		
 
 
 
@@ -74,6 +87,8 @@ q2->engueue(levelK);
 
 
 
+
+power++;
       iterations--;
    }
 
