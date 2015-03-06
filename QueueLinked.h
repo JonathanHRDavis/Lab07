@@ -70,7 +70,16 @@ void QueueLinked<T>::dequeueAll()
 template < class T >
 T* QueueLinked<T>::peek()
 {
+
     T* item = NULL;
+
+	if(sze==1)
+	{
+	item = back->getItem();
+	return item;
+	}
+	
+
     if (!isEmpty()) 
     {  
       // queue is not empty; retrieve front
@@ -88,7 +97,7 @@ void QueueLinked<T>::enqueue(T* item)
     //DO THIS (enqueueing the first item is a special case)
 if (sze == 0)
 	{
-		NextNode<T>* back = new NextNode<T>(item);
+		/*NextNode<T>**/ back = new NextNode<T>(item);
 	}
 
 else if ( sze == 1 )
@@ -121,6 +130,19 @@ T* QueueLinked<T>::dequeue()
 
 
    if (sze == 0) return NULL;
+   
+
+   	 if (sze == 1)
+{
+	  item = back->getItem();
+	back = NULL;
+   sze = 0;
+   return item;
+}
+ 
+else
+{ 
+
 
    NextNode<T>* prev = NULL;
    NextNode<T>* curr = back->getNext();  //the head
@@ -136,7 +158,12 @@ T* QueueLinked<T>::dequeue()
    
 
 
+	
+
+		sze--;
     return item;
+	
+}
 }
 
 #endif

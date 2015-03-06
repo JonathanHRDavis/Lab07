@@ -4,6 +4,9 @@
 #include "Double.h"
 using CSC2110::Double;
 
+using namespace std;
+#include <iostream>
+
 #include <math.h>
 
 //a is the lower limit and b is the upper limit
@@ -15,6 +18,7 @@ double RombergIntegration::accurateRomberg(MultiVarFunction* f, double a, double
    QueueLinked<Double>* q2 = new QueueLinked<Double>;
 
 
+
    int counter = 0;
    int n = 1;  //current number of intervals
    while ( counter < 4 )
@@ -23,8 +27,8 @@ double RombergIntegration::accurateRomberg(MultiVarFunction* f, double a, double
       //obtain the required number of trapezoid evaluations depending on the number of levels requested
       //put all of the level 0 results on the q1
 
-Double* level0 = new Double( romberg(f,a,b,n) );
-q1->enqueue(level0);
+db = new Double( RecursiveIntegration::romberg(f,a,b,n) );
+q1->enqueue(db);
 
 
 
@@ -37,6 +41,11 @@ q1->enqueue(level0);
       counter++;
    }
 
+  
+
+
+
+
    //q1 now has all of the level 0 integration results
 
    double factor;  //use this to compute the current Romberg Factor (4^k stuff)
@@ -46,49 +55,63 @@ q1->enqueue(level0);
    //the total number of executions of the loop is ??
 
    //DO THIS
-   int iterations =     3   ;        //can be precomputed
+   int iterations =  level   ;        //can be precomputed
+   
+   
+	/*for (int i = level; i > 1; i--)		// This gets the discreet math formula, 
+	{
+		iterations = iterations + ( i - 1 );
+	}*/
+	
+
    while (iterations > 0)
    {
       //DO THIS
       //use the algorithm described in the lab to improve the accuracy of your level 0 results
+		
+	
+	  double lA;
+	  double mA;
 
-	  
-	  for (int i = 0; i<iterations; i++)
+	  int queueLoop = ( q1->size() - 1 );
+
+	  for (int i = 0; i<( queueLoop ); i++)
 	   {
-		double lA = q1->dequeue()->getValue();
-		double mA = q1->peek()->getValue();
+	   Double* temp = q1->peek();
+	   
+		lA = q1->dequeue()->getValue();
+		
+		mA = q1->peek()->getValue();
 	  
-		Double* levelK = new Double( ( ( (pow(4,power)) * mA ) - lA ) / ( (pow(4,power) - 1 ) ) );
-		q2->enqueue(levelK);
+		Double* db = new Double( ( ( (pow(4,power)) * mA ) - lA ) / ( (pow(4,power) - 1 ) ) );
+		q2->enqueue(db);
+		
+		delete temp;
 
 		}
-		q1->dequeue();
 		
-		for (int i = 0; i < (iterations-1); i++)
+		
+		
+
+		if (q1->size() == 1)
+		{
+		
+		q1->dequeueAll();
+		queueLoop = q2->size();
+		
+		for (int i = 0; i < ( queueLoop ); i++)
 	    {
-			q1->enqueue(q2->dequeue());
+		
+			Double* temp = q2->peek();
+			q1->enqueue(temp);
+			q2->dequeue();
+			//delete temp;
 		}
-		
-		
+			q2->dequeueAll();
+		}
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-power++;
+	power++;
       iterations--;
    }
 
@@ -101,4 +124,6 @@ power++;
    delete q2;
 
    return result;
+
+
 }
